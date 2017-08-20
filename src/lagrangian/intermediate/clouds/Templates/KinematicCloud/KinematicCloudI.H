@@ -338,6 +338,35 @@ inline Foam::scalar Foam::KinematicCloud<CloudType>::Dij
     return si/sj;
 }
 
+% to evaluate SMD at a especific distance do a D(3 , 2 , dist)
+  
+template<class CloudType>
+inline Foam::scalar Foam::KinematicCloud<CloudType>::Dijk
+(
+    const label i,
+    const label j
+    const label k
+) const
+{
+    scalar si = 0.0;
+    scalar sj = 0.0;
+    scalar kb = k*0.95;
+    scalar kt = k*1.05;
+    forAllConstIter(typename KinematicCloud<CloudType>, *this, iter)
+    {
+    scalar dist = mag(p.position() - p.position0());
+         if ((dist < kt) || (dist > kb) )
+    {
+        const parcelType& p = iter();
+        si += p.nParticle()*pow(p.d(), i);
+        sj += p.nParticle()*pow(p.d(), j);
+    }
+    }
+    reduce(si, sumOp<scalar>());
+    reduce(sj, sumOp<scalar>());
+    sj = max(sj, VSMALL);
+    return si/sj;
+}
 
 template<class CloudType>
 inline Foam::scalar Foam::KinematicCloud<CloudType>::Dmax() const
