@@ -232,12 +232,17 @@ void Foam::SprayCloud<CloudType>::info()
     CloudType::info();
     scalar d32 = 1.0e+6*this->Dij(3, 2);
     scalar d10 = 1.0e+6*this->Dij(1, 0);
+    scalar SMDnew = 1.0e+6*this->Dij(3, 2, 0.02);
     scalar dMax = 1.0e+6*this->Dmax();
-    scalar pen = this->penetration(0.95);
-
+    scalar pen95 = this->penetration(0.95);
+    scalar pen97 = this->penetration(0.97);
+    scalar pen99 = this->penetration(0.99);
     Info << "    D10, D32, Dmax (mu)             = " << d10 << ", " << d32
          << ", " << dMax << nl
-         << "    Liquid penetration 95% mass (m) = " << pen << endl;
+    Info << "    SMD at 20mm (mu)             = " << SMDnew << ", " << nl
+        << "    Liquid penetration 95% mass (m) = " << pen95 << endl;
+        << "    Liquid penetration 97% mass (m) = " << pen97 << endl;
+        << "    Liquid penetration 99% mass (m) = " << pen99 << endl;
 }
 
 
